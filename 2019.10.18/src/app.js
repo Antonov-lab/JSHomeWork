@@ -1,3 +1,4 @@
+// лучше обернуть в function getDbData() и куда нибудь вниз файла, а то приходится скроллить
 let db = [
     {
         "id": 1,
@@ -810,7 +811,10 @@ let db = [
  * @param {Function} filterFn
  */
 function search(items, currentPage, pageSize, sortFn, filterFn) {
+    // createdSort и tagsFilter опциональны в поиске
+
     if (items.length === 0 || pageSize < 0) {
+        // да как могут строки возвращаться-то? здесь стоит вернуть пустой массив
         return "Incorrect input data";
     }
 
@@ -818,6 +822,7 @@ function search(items, currentPage, pageSize, sortFn, filterFn) {
     let filteredDb = filterFn(items);
     let result = filteredDb.slice(pageSize * currentPage - pageSize, pageSize * currentPage);
 
+    // не "Empty result" а []
     return (result.length === 0) ? "Empty result" : result;
 }
 
@@ -826,6 +831,8 @@ function search(items, currentPage, pageSize, sortFn, filterFn) {
  * @param {Array} items
  */
 function createdAtSort(items) {
+    // такое себе, лучше заранее данные все подготовить, чем каждый раз вызывать new Date,
+    // т.е. перед началом приложения стоило через map сделать даты датами
     return items.sort((a, b) => {
         let dateA = new Date(a.createdAt);
         let dateB = new Date(b.createdAt);
@@ -842,4 +849,5 @@ function tagsFilter(items) {
     return items.filter(item => item.tags === "com");
 }
 
+// Зачем, если есть тесты?
 //console.log(search(db, 1, 50, createdAtSort, tagsFilter));

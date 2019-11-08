@@ -1,4 +1,5 @@
 describe("App", function () {
+    // db в данном случае должна быть заглушкой, а не частью реальных данных, чтобы ты мог проверить что например во второй записи содержится такая-то дата
     let db = [
         {
             "id": 1,
@@ -38,6 +39,7 @@ describe("App", function () {
     ];
 
     it("should return array with length = 2", function () {
+        // у тебя здесь функции фильтра и сортировки никогда не должны были быть
         expect(search(db, 1, 2, createdAtSort, tagsFilter).length).toBeGreaterThan(0);
         expect(search(db, 1, 2, createdAtSort, tagsFilter).length).toBeLessThan(3);
     });
