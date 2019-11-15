@@ -1,56 +1,44 @@
 function yesOrNo(value) {
-    if (value === null || value === undefined) {
+    if (typeof (value) !== "boolean") {
         return null;
     }
 
-    let result = Boolean(value) === true ? "Yes" : "No";
-    return result;
+    return (value === true) ? "Yes" : "No";
 }
 
 function counter(total) {
-    if (total === null || total === undefined) {
-        return null;
+    if (Number.isInteger(total) && total > 0) {
+        return (total > 9) ? "9+" : total;
     }
 
-    if (!Number(total)) {
-        return "Incorrect input data";
-    } else if (Number(total) > 9) {
-        return "9+";
-    }
-
-    let result = 0;
-    for (let index = 1; index <= total; index++) {
-        result += index;
-    }
-
-    return result;
+    return null;
 }
 
-/**
- *
- * @param {Date} date
- */
 function calculateAge(date) {
-    if (date === null || date === undefined) {
+    if (!isValidDate(date)) {
         return null;
     }
 
-    let diff_ms = Date.now() - date.getTime();
-    let age_dt = new Date(diff_ms);
-    let result = Math.abs(age_dt.getUTCFullYear() - 1970);
+    let diffMs = Date.now() - date.getTime();
+
+    if (diffMs < 0){
+        return null;
+    }
+
+    let ageDt = new Date(diffMs);
+    let result = ageDt.getUTCFullYear() - 1970;
 
     return result;
 }
 
-/**
- *
- * @param {Array} list
- */
+function isValidDate(date) {
+    return date && Object.prototype.toString.call(date) === "[object Date]" && !isNaN(date);
+}
+
 function getRandomItem(list) {
-    if (list === null || list === undefined || list.length === 0) {
-        return null;
+    if (Array.isArray(list) && list.length > 0) {
+        return list[Math.floor(Math.random() * list.length)];
     }
 
-    let result = list[Math.floor(Math.random() * list.length)];
-    return result;
+    return null;
 }
