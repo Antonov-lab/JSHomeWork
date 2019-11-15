@@ -18,10 +18,16 @@ describe("Search", function () {
     ];
 
     it("should return array(length = 2) for correct input and pageSize = 2", function () {
-        expect(search(db, 1, 2)).toBeInstanceOf(Array);
-        expect(search(db, 1, 2).length).toBeGreaterThan(0);
-        expect(search(db, 1, 2).length).toBeLessThan(3);
+        expect(search(db, 1, 2).length).toBe(2);
     });
+
+    it("should be 1 article for page number 3", function () {
+        expect(search(db, 3, 2).length).toBe(1);
+    })
+
+    it("should be 0 article for page number 4", function () {
+        expect(search(db, 4, 2).length).toBe(0);
+    })
 
     it("should return empty array, because input items[] is empty", function () {
         let emptyDb = [];
@@ -89,9 +95,7 @@ describe("tagsFilter", function () {
     ];
 
     it("should return filtered array(length = 2) with 'com' items", function () {
-        expect(tagsFilter(db).length).toBeGreaterThan(0);
-        expect(tagsFilter(db).length).toBeLessThan(3);
-
+        expect(tagsFilter(db).length).toBe(2);
         expect(tagsFilter(db).every(elem => elem.tags === 'com')).toBeTrue();
     });
 });
