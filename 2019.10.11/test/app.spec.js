@@ -1,75 +1,65 @@
-describe("App", function () {
-    // на самом деле это 4 отдельных describe, по одному на каждую фичу
-    //yesOrNo(value)
-    it("should return yes", function () {
-        expect(yesOrNo("some data")).toBe("Yes"); // этот тест точно должен был null вернуть для некорректных данных
+describe("yesOrNo", function () {
+    it("should return 'Yes' for input data = true", function () {
+        expect(yesOrNo(true)).toBe("Yes");
     });
 
-    // и ни одного теста, который проверяет что нужно, где проверка true / false
-    it("should return no", function () {
-        expect(yesOrNo(0)).toBe("No");
+    it("should return 'No' for input data = false", function () {
+        expect(yesOrNo(false)).toBe("No");
     });
 
-    // нужно в описании указывать что вернётся и в зависимости от чего, типа should be null for incorrect data
-    it("should return null", function () {
-        let value;
+    it("should return null for incorrect input data", function () {
+        let value = "true";
         expect(yesOrNo(value)).toBe(null);
     });
+});
 
-
-    //counter(total)
-    // тесты счётчика некорректны, задача другая
-    it("should return 15", function () {
-        expect(counter(5)).toBe(15);
+describe("counter", function () {
+    it("should return 5 for input data = 5", function () {
+        expect(counter(5)).toBe(5);
     });
 
-    it("should return 9+", function () {
+    it("should return '9+' for input data = 10", function () {
         expect(counter(10)).toBe("9+");
     });
 
-    it("should return 'incorrect input data'", function () {
-        expect(counter("123r")).toBe("Incorrect input data");
-    });
-
-    it("should return null", function () {
+    it("should return null for incorrect input data", function () {
         let total;
         expect(counter(total)).toBe(null);
     });
 
+});
 
-    //calculateAge(date)
-    // ужасные описания, should be null for 15.08.1969
-    it("should return 50", function () {
+describe("calculateAge", function () {
+    it("should return 50 for 15.07.1969", function () {
         let date = new Date(1969, 7, 15);
         expect(calculateAge(date)).toBe(50);
     });
 
     it("should be null for date in the future", function () {
         let date = new Date(2039, 7, 15);
-        expect(calculateAge(date)).toBe(null); // ?
-    });
-
-    // should be null for incorrect data
-    it("should return null", function () {
-        let date;
         expect(calculateAge(date)).toBe(null);
     });
 
+    it("should return null for incorrect input data", function () {
+        let date = "15.07.1969";
+        expect(calculateAge(date)).toBe(null);
+    });
+});
 
-    //getRandomItem(list)
-    it('should return random item', function () {
+describe("getRandomItem", function () {
+    it('should return random item for not empty array', function () {
         let list = [1, 2];
 
         expect(getRandomItem(list)).toBeGreaterThan(0);
         expect(getRandomItem(list)).toBeLessThan(3);
     });
 
-    it('should return null', function () {
+    it('should return null for empty array', function () {
         let list = [];
         expect(getRandomItem(list)).toBe(null);
     });
 
-    it('should return null', function () {
+    it('should return null for incorrect input data', function () {
         let list;
         expect(getRandomItem(list)).toBe(null);
     });

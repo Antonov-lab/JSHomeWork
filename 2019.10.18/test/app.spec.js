@@ -1,64 +1,101 @@
-describe("App", function () {
-    // db в данном случае должна быть заглушкой, а не частью реальных данных, чтобы ты мог проверить что например во второй записи содержится такая-то дата
+describe("Search", function () {
     let db = [
         {
-            "id": 1,
-            "name": "Item1",
-            "content": "Donec quis orci eget orci vehicula condimentum. Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo.",
-            "tags": "com",
-            "createdAt": "2014-12-02T11:10:49Z"
+            "id": 1
         },
         {
-            "id": 2,
-            "name": "Item2",
-            "content": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin risus. Praesent lectus. Vestibulum quam sapien, varius ut, blandit non, interdum in, ante.",
-            "tags": "net",
-            "createdAt": "2012-05-20T00:15:15Z"
+            "id": 2
         },
         {
-            "id": 3,
-            "name": "Item3",
-            "content": "Etiam faucibus cursus urna. Ut tellus. Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi. Cras non velit nec nisi vulputate nonummy.",
-            "tags": "com",
-            "createdAt": "2016-06-23T01:05:33Z"
+            "id": 3
         },
         {
-            "id": 4,
-            "name": "Item4",
-            "content": "Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.",
-            "tags": "net",
-            "createdAt": "2015-04-19T18:04:21Z"
+            "id": 4
         },
         {
-            "id": 5,
-            "name": "Item5",
-            "content": "Nunc rhoncus dui vel sem. Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.",
-            "tags": "net",
-            "createdAt": "2018-05-03T04:11:57Z"
+            "id": 5
         }
     ];
 
-    it("should return array with length = 2", function () {
-        // у тебя здесь функции фильтра и сортировки никогда не должны были быть
-        expect(search(db, 1, 2, createdAtSort, tagsFilter).length).toBeGreaterThan(0);
-        expect(search(db, 1, 2, createdAtSort, tagsFilter).length).toBeLessThan(3);
+    it("should return array(length = 2) for correct input and pageSize = 2", function () {
+        expect(search(db, 1, 2).length).toBe(2);
     });
 
-    it("should return not empty array", function () {
-        expect(search(db, 1, 2, createdAtSort, tagsFilter)).toBeInstanceOf(Array);
-        expect(search(db, 1, 2, createdAtSort, tagsFilter).length).toBeGreaterThan(0);
-    });
+    it("should be 1 article for page number 3", function () {
+        expect(search(db, 3, 2).length).toBe(1);
+    })
 
-    it("should return 'Incorrect input data', because items[] is empty", function () {
+    it("should be 0 article for page number 4", function () {
+        expect(search(db, 4, 2).length).toBe(0);
+    })
+
+    it("should return empty array, because input items[] is empty", function () {
         let emptyDb = [];
-        expect(search(emptyDb, 1, 2, createdAtSort, tagsFilter)).toBe("Incorrect input data");
+        expect(search(emptyDb, 1, 2)).toEqual([]);
     });
 
-    it("should return 'Incorrect input data', because pageSize is negative", function () {
-        expect(search(db, 1, -1, createdAtSort, tagsFilter)).toBe("Incorrect input data");
+    it("should return empty array, because pageSize is negative", function () {
+        expect(search(db, 1, -1)).toEqual([]);
     });
 
-    it("should return 'Empty result', because resultant array is empty", function () {
-        expect(search(db, 5, 2, createdAtSort, tagsFilter)).toBe("Empty result");
+    it("should return empty array, because output array is empty", function () {
+        expect(search(db, 5, 2)).toEqual([]);
+    });
+});
+
+describe("createdAtSort", function () {
+    let db = [
+        {
+            "createdAt": "2014-12-02T11:10:49Z"
+        },
+        {
+            "createdAt": "2012-05-20T00:15:15Z"
+        },
+        {
+            "createdAt": "2016-06-23T01:05:33Z"
+        },
+        {
+            "createdAt": "2015-04-19T18:04:21Z"
+        },
+        {
+            "createdAt": "2018-05-03T04:11:57Z"
+        }
+    ].map(function (e) {
+        return {
+            createdAt: new Date(e.createdAt)
+        }
+    });
+
+    it('should return first element of sorted array - latest date', function () {
+        expect(createdAtSort(db)[0].createdAt).toEqual(new Date('2012-05-20T00:15:15Z'));
+    });
+
+    it('should return last element of sorted array - early date', function () {
+        expect(createdAtSort(db)[4].createdAt).toEqual(new Date('2018-05-03T04:11:57Z'));
+    });
+});
+
+describe("tagsFilter", function () {
+    let db = [
+        {
+            "tags": "com"
+        },
+        {
+            "tags": "com"
+        },
+        {
+            "tags": "ru"
+        },
+        {
+            "tags": "ru"
+        },
+        {
+            "tags": "ru"
+        },
+    ];
+
+    it("should return filtered array(length = 2) with 'com' items", function () {
+        expect(tagsFilter(db).length).toBe(2);
+        expect(tagsFilter(db).every(elem => elem.tags === 'com')).toBeTrue();
     });
 });
